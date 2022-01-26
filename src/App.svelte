@@ -12,7 +12,7 @@
 		const res = await fetch(`https://ballchasing.com/api/`,{  
 			method: 'GET',
 			headers: myHeaders,
-			mode: 'cors',
+			mode: 'no-cors',
 		});
 		const text = await res.text();
 
