@@ -1,30 +1,43 @@
 <script>
-	export let name;
-</script>
+	let promise = getRandomNumber();
 
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
+	async function getRandomNumber() {
+		const myHeaders ={
+			"Authorization": 'YZWqXzZeoLgNfxLAjmrBmcAJWqNeOqfNMscvO2el'
+		};
 
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
+		let requestHeaders = new Headers();
+		requestHeaders.append("Authorization", 'YZWqXzZeoLgNfxLAjmrBmcAJWqNeOqfNMscvO2el');
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
+		const res = await fetch(`https://ballchasing.com/api/`,{  
+			method: 'GET',
+			headers: myHeaders,
+			mode: 'cors',
+		});
+		const text = await res.text();
 
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
+		if (res.ok) {
+			return text;
+		} else {
+			throw new Error(text);
 		}
 	}
-</style>
+
+	function handleClick() {
+		promise = getRandomNumber();
+	}
+</script>
+
+<button on:click={handleClick}>
+	generate random number
+</button>
+
+<h1>Hello</h1>
+
+{#await promise}
+	<p>...waiting</p>
+{:then number}
+	<p>The number is {number}</p>
+{:catch error}
+	<p style="color: red">{error.message}</p>
+{/await}
