@@ -11,7 +11,7 @@
   		mode: 'cors'
 		
 	};
-		const res = await fetch("https://ballchasing.com/api/", requestOptions);
+		const res = await fetch("/api/https://ballchasing.com/api/", requestOptions);
 		const text = await res.text();
 
 		if (res.ok) {
