@@ -3,17 +3,17 @@
 
 	async function getRandomNumber() {
 		const myHeaders ={
-			"Authorization": 'YZWqXzZeoLgNfxLAjmrBmcAJWqNeOqfNMscvO2el'
+			"Authorization": ''
 		};
 
 		let requestHeaders = new Headers();
-		requestHeaders.append("Authorization", 'YZWqXzZeoLgNfxLAjmrBmcAJWqNeOqfNMscvO2el');
+		requestHeaders.append("Authorization", ');
 
 		const res = await fetch(`https://ballchasing.com/api/`,{  
 			method: 'GET',
 			mode: 'no-cors',
 			headers: {
-    			Authentication: 'YZWqXzZeoLgNfxLAjmrBmcAJWqNeOqfNMscvO2el'
+    			Authentication: ''
   				}
 		});
 		const text = await res.text();
