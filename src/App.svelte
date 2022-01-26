@@ -1,21 +1,17 @@
 <script>
 	let promise = getRandomNumber();
-
+	let apiKey = "";
 	async function getRandomNumber() {
-		const myHeaders ={
-			"Authorization": ''
-		};
-
-		let requestHeaders = new Headers();
-		requestHeaders.append("Authorization", ');
-
-		const res = await fetch(`https://ballchasing.com/api/`,{  
-			method: 'GET',
-			mode: 'no-cors',
-			headers: {
-    			Authentication: ''
-  				}
-		});
+		let myHeaders = new Headers();
+		myHeaders.append("Authorization", apiKey);
+		
+		let requestOptions = {
+  		method: 'GET',
+  		headers: myHeaders,
+  		mode: 'cors'
+		
+	};
+		const res = await fetch("https://ballchasing.com/api/", requestOptions);
 		const text = await res.text();
 
 		if (res.ok) {
@@ -30,8 +26,11 @@
 	}
 </script>
 
+<input bind:value={apiKey} placeholder="enter your api key"> 
+<p>{apiKey}</p>
+
 <button on:click={handleClick}>
-	generate random number
+	Refresh
 </button>
 
 <h1>Hello</h1>
