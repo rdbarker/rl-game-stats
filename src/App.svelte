@@ -11,8 +11,10 @@
 
 		const res = await fetch(`https://ballchasing.com/api/`,{  
 			method: 'GET',
-			headers: myHeaders,
 			mode: 'no-cors',
+			headers: {
+    			Authentication: 'YZWqXzZeoLgNfxLAjmrBmcAJWqNeOqfNMscvO2el'
+  				}
 		});
 		const text = await res.text();
 
