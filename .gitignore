@@ -109,3 +109,5 @@ dist
 
 .DS_Store
 >>>>>>> 970261c (basic svelte project setup)
+
+.vercel
