@@ -3,7 +3,7 @@
 <script>
 	import MatchesList from './components/MatchesList.svelte';
 	import KeyInput from './components/KeyInput.svelte';
-	import './icons.css';
+	
 
   let apiKey;
   let keyVerified;
