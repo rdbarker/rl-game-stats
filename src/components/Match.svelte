@@ -17,7 +17,10 @@
 </style>
 
 <div>
-    <TimeHeader timeString={gameData.date}/>
+   {#if gameData.status === "ok"}
+        <TimeHeader timeString={gameData.date}/>
+        {:else}
+        loading...
+    {/if}
 </div>
-
 

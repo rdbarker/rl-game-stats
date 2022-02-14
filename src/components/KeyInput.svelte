@@ -1,4 +1,6 @@
 <script>
+import { onMount } from "svelte";
+
     import {fetchPing} from "./scripts/apiFetch"
 
     export let apiKey = "";
@@ -11,18 +13,21 @@
         undefined: {"src":"icon-x", "color":"#e75c5c"}
     }
 
-    if (localStorage.getItem("ballchasing")){
-        apiKey = localStorage.getItem("ballchasing");
-    }
     $: localStorage.setItem("ballchasing", apiKey);
+    if (localStorage.getItem("ballchasing")){
+            apiKey = localStorage.getItem("ballchasing");
+        }
+    onMount(() =>{
 
-    let promise = fetchPing(apiKey).then(
-        value => {
-                    verifiedJson = value;
-                    keyVerified = verifiedJson["chaser"] ? true : false;
-                }
+            let promise = fetchPing(apiKey).then(
+                value => {
+                            verifiedJson = value;
+                            keyVerified = verifiedJson["chaser"] ? true : false;
+                        }
+            );
+    });
+
     
-    );
 
 </script>
 <div>
