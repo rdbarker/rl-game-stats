@@ -1,14 +1,8 @@
-
-
 <script>
-	import MatchesList from './components/MatchesList.svelte';
-	import KeyInput from './components/KeyInput.svelte';
-	
-  let apiKey;
-  let keyVerified;
+  import MatchesList from "./components/MatchesList.svelte";
+  import KeyInput from "./components/KeyInput.svelte";
 </script>
 
-<KeyInput bind:apiKey={apiKey} bind:keyVerified={keyVerified} /> 
+<KeyInput />
 
-<MatchesList bind:apiKey={apiKey} bind:keyVerified={keyVerified} />
-
+<MatchesList />
