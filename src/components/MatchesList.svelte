@@ -1,64 +1,60 @@
 <script>
-    import {fetchGame, fetchListOfGames} from "./scripts/apiFetch";
-    import Match from "./Match.svelte"
-    export let apiKey = "";
-    export let keyVerified = false;
+  import { fetchGame, fetchListOfGames, fetchStats } from "./scripts/apiFetch";
+  import Match from "./Match.svelte";
+  import { apiKey, keyVerified } from "./scripts/stores.js";
+  import { onMount } from "svelte";
 
-    import { onMount } from 'svelte';
+  let time = new Date();
+  let secondsBetweenRefresh = 10;
+  let games = new Map();
 
-	let time = new Date();
-    let secondsBetweenRefresh = 10;
-    let games = new Map();
-    
+  $: seconds = time.getSeconds();
+  $: if (seconds % secondsBetweenRefresh == 0 && $keyVerified) refreshGames();
 
-	$: seconds = time.getSeconds();
-    $: if(seconds % secondsBetweenRefresh == 0 && keyVerified) refreshGames();
+  onMount(() => {
+    const interval = setInterval(() => {
+      time = new Date();
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  });
 
-	onMount(() => {
-		const interval = setInterval(() => {
-			time = new Date();
-		}, 1000);
+  async function refreshGames() {
+    let gamesList = await fetchListOfGames($apiKey, 15);
+    gamesList.list.forEach((item) => {
+      if (!games.has(item.id)) {
+        games.set(item.id, {});
+      }
+    });
 
-		return () => {
-			clearInterval(interval);
-		};
-	});
-
-    async function refreshGames(){
-        let gamesList = await fetchListOfGames(apiKey, 15);
-        
-        gamesList.list.forEach(item =>{
-            if (!games.has(item.id)){
-                games.set(item.id, {}); 
-            }
-        });
-
-        for(const [key, value] of games){
-            if(value === false || !("status" in value)){
-                games.set(key, await loadMatch(key));
-                delay(500);
-                games = sortGames(games);
-            } 
-        }
+    for (const [gameDataId, gameData] of games) {
+      if (gameData === false || !("status" in gameData)) {
+        let currentMatch = await loadMatch(gameDataId);
+        games.set(gameDataId, currentMatch);
+        delay(500);
+        games = sortGames(games);
+      }
     }
+  }
 
-    async function loadMatch(gameId){
-        console.log("loading a game");
-        return await fetchGame(apiKey, gameId);
-    }
+  async function loadMatch(gameId) {
+    return await fetchGame($apiKey, gameId);
+  }
 
-    function sortGames(games){
-        return new Map([...games].sort(([key1, value1],[key2, value2]) => {
-            let entry1Date = new Date(value1.date);
-            let entry2Date = new Date(value2.date);
-            return entry2Date - entry1Date;
-        } ));
-    }
+  function sortGames(games) {
+    return new Map(
+      [...games].sort(([key1, value1], [key2, value2]) => {
+        let entry1Date = new Date(value1.date);
+        let entry2Date = new Date(value2.date);
+        return entry2Date - entry1Date;
+      })
+    );
+  }
 
-    const delay = ms => new Promise(res => setTimeout(res, ms));
-
+  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 </script>
 
 {#each [...games] as [gameId, stats] (gameId)}
-    <Match gameData = {stats}/>
+  <Match gameData={stats} />
 {/each}
