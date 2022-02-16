@@ -1,18 +1,19 @@
 @font-face {
-  font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?y5nbql');
-  src:  url('fonts/icomoon.eot?y5nbql#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?y5nbql') format('truetype'),
-    url('fonts/icomoon.woff?y5nbql') format('woff'),
-    url('fonts/icomoon.svg?y5nbql#icomoon') format('svg');
+  font-family: "icomoon";
+  src: url("fonts/icomoon.eot?y5nbql");
+  src: url("fonts/icomoon.eot?y5nbql#iefix") format("embedded-opentype"),
+    url("fonts/icomoon.ttf?y5nbql") format("truetype"),
+    url("fonts/icomoon.woff?y5nbql") format("woff"),
+    url("fonts/icomoon.svg?y5nbql#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
   font-display: block;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+[class^="icon-"],
+[class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
+  font-family: "icomoon" !important;
   speak: never;
   font-style: normal;
   font-weight: normal;
@@ -48,12 +49,10 @@
 }
 .icon-playstation:before {
   content: "\e907";
-  color: #003791;
 }
 .icon-steam:before {
   content: "\e908";
 }
 .icon-xbox:before {
   content: "\e909";
-  color: #107c10;
 }
