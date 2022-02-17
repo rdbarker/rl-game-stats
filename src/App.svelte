@@ -4,11 +4,8 @@
   import TeamTable from "./components/match/TeamTable.svelte";
 </script>
 
-<TeamTable />
-<div>-</div>
-<div>-</div>
-<div>-</div>
-<TeamTable />
+<KeyInput />
+<MatchesList />
 
 <style>
 </style>
