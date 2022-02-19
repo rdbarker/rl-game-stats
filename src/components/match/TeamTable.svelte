@@ -1,72 +1,84 @@
-<table>
+<script>
+  //background-color: #515a64;
+  import { userId, activeTeamStats } from "../scripts/stores.js";
+  import { parseTableHeader, parseTableData } from "../scripts/stringHelpers";
+
+  export let teamStats;
+  function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  function isYou(idToCheck) {
+    return $userId === idToCheck ? "you" : "";
+  }
+  function displayPercent(number) {
+    return number.toFixed(1) + "%";
+  }
+</script>
+
+<table class={teamStats.color}>
   <tr>
-    <th />
-    <th>Score</th>
-    <th>Goals</th>
-    <th>Assists</th>
-    <th>Saves</th>
-    <th>Shots</th>
-    <th>Shot%</th>
-    <th>Demos</th>
+    <th>{teamStats.goals}</th>
+    {#each $activeTeamStats as stat}
+      <th>{parseTableHeader(stat)}</th>
+    {/each}
   </tr>
-  <tr>
-    <td><i class="icon-xbox" />xSupaFriedRicex</td>
-    <td>248</td>
-    <td>0</td>
-    <td>0</td>
-    <td>2</td>
-    <td>2</td>
-    <td>0%</td>
-    <td>0</td>
-  </tr>
-  <tr>
-    <td><i class="icon-steam" />Ryu</td>
-    <td>206</td>
-    <td>1</td>
-    <td>0</td>
-    <td>0</td>
-    <td>3</td>
-    <td>33%</td>
-    <td>2</td>
-  </tr>
-  <tr>
-    <td><i class="icon-playstation" />MrSuuurre</td>
-    <td>160</td>
-    <td>0</td>
-    <td>0</td>
-    <td>2</td>
-    <td>2</td>
-    <td>0%</td>
-    <td>0</td>
-  </tr>
+  {#each teamStats.players as player}
+    <tr class={isYou(player.id)}>
+      <td>{player.name}</td>
+
+      {#each $activeTeamStats as stat}
+        <td>
+          {parseTableData(player.stats[stat], stat)}
+        </td>
+      {/each}
+    </tr>
+  {/each}
 </table>
 
 <style>
   table {
     border-collapse: collapse;
-    width: 840px;
+    margin: 2em 1em;
+    table-layout: fixed;
   }
-
-  td,
+  .orange tr.you {
+    color: rgb(248, 197, 101);
+  }
+  .blue tr.you {
+    color: rgb(133, 161, 255);
+  }
+  .orange th:first-of-type {
+    color: rgb(248, 197, 101);
+  }
+  .blue th:first-of-type {
+    color: rgb(133, 161, 255);
+  }
+  .orange th {
+    border-bottom: 2px solid rgb(248, 197, 101);
+  }
+  .blue th {
+    border-bottom: 2px solid rgb(133, 161, 255);
+  }
+  th:first-of-type {
+    font-size: 2em;
+    text-align: right;
+    width: 8ch;
+  }
   th {
-    padding: 2px;
+    width: 3.5em;
+    text-align: center;
+    vertical-align: bottom;
   }
-
   td {
-    border-bottom: 1px solid rgba(172, 172, 172, 0.904);
+    text-align: center;
   }
-
+  td:first-child {
+    text-align: right;
+  }
   tr:nth-child(even) {
   }
-
-  th {
-    padding: 2px;
-    text-align: left;
-    background-color: rgb(37, 36, 41);
-    border-bottom: 1px solid rgba(253, 143, 0, 0.904);
-  }
-
   i {
-    padding-right: 4px;
+    padding-right: 6px;
+    padding-left: 2px;
   }
 </style>

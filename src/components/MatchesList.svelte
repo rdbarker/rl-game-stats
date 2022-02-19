@@ -55,6 +55,15 @@
   const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 </script>
 
-{#each [...games] as [gameId, stats] (gameId)}
-  <Match gameData={stats} />
-{/each}
+<div>
+  {#each [...games] as [gameId, stats] (gameId)}
+    <Match gameData={stats} />
+  {/each}
+</div>
+
+<style>
+  div {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+</style>

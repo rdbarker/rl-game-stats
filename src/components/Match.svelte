@@ -1,65 +1,88 @@
 <script>
-    import TimeHeader from "./match/TimeHeader.svelte";
-    import Player from "./match/Player.svelte";
+  import TimeHeader from "./match/TimeHeader.svelte";
+  import TeamTable from "./match/TeamTable.svelte";
 
-    export let gameData = {};
-    let isDataLoaded = false;
-    let gameStats = {
-        time: "timestring",
-        map: "map_code",
-        matchType: "match_type",
-        teamSize: "team_size"
+  export let gameData = {};
+  let isDataLoaded = false;
+  let gameStats = {};
+
+  $: if (gameData.status === "ok") {
+    isDataLoaded = true;
+    buildGameStats();
+    console.log(gameStats);
+  }
+
+  function buildGameStats() {
+    gameStats = {
+      date: gameData.date,
+      map: gameData.map_code,
+      matchType: gameData.match_type,
+      teamSize: gameData.team_size,
+      winningTeam: findWinningTeam(),
+      yourTeam: findYourTeam(),
+      teams: buildTeams(gameStats.winningTeam),
     };
-    let myTeam = {
-  
+  }
+  function findWinningTeam() {
+    return gameData.blue.stats.core.goals > gameData.orange.stats.core.goals
+      ? "blue"
+      : "orange";
+  }
+  function findYourTeam() {
+    let isPlayerOrange = gameData.orange.players
+      .map((player) => player.id.id)
+      .includes(gameData.uploader.steam_id);
+    return isPlayerOrange ? "orange" : "blue";
+  }
+  function buildTeams(winningTeam) {
+    return winningTeam === "blue"
+      ? [buildTeamStats("blue"), buildTeamStats("orange")]
+      : [buildTeamStats("orange"), buildTeamStats("blue")];
+  }
+  function buildTeamStats(teamColor) {
+    return {
+      color: teamColor,
+      goals: gameData[teamColor].stats.core.goals,
+      shots: gameData[teamColor].stats.core.shots,
+      saves: gameData[teamColor].stats.core.saves,
+      players: buildPlayers(teamColor),
     };
-    let otherTeam = {
-        color: "blue",
-        players: {},
-
-    };
-
-    $: if(gameData.status === "ok"){
-        isDataLoaded = true;
-        buildGameStats();
-    }
-
-    function buildGameStats(){
-        let usersTeam = "blue";
-        //find user's team
-        let usersId = gameData.uploader.steam_id;
-        let teamBlue = gameData.blue;
-        let teamOrange = gameData.orange;
-
-        let isPlayerOrange = teamOrange.players.map(player =>player.id.id ).includes(usersId);
-        if (isPlayerOrange) usersTeam = "orange";
-    }
-
-    
-
+  }
+  function buildPlayers(teamColor) {
+    return gameData[teamColor].players.map((player) => {
+      return {
+        name: player.name,
+        platform: player.id.platform,
+        id: player.id.id,
+        stats: {
+          score: player.stats.core.score,
+          goals: player.stats.core.goals,
+          shots: player.stats.core.shots,
+          assists: player.stats.core.assists,
+          saves: player.stats.core.saves,
+          shotPercentage: player.stats.core.shooting_percentage,
+          demos: player.stats.demo.inflicted,
+        },
+      };
+    });
+  }
 </script>
 
-
-
-<style>
-    div{
-        width: 1200px;
-        height: 120px;
-        border: 2px solid darkslategrey;
-        margin: 16px;
-        
-    }
-</style>
-
 <div>
-   {#if isDataLoaded}
-        <TimeHeader timeString={gameData.date}/>
-        
-        {#each gameData.blue.players as bluePlayer}
-            <Player name={bluePlayer.name} platform={bluePlayer.id.platform} platformId={bluePlayer.id.id}/>
-        {/each}
-    {:else}
-        loading...
-    {/if}
+  {#if isDataLoaded}
+    <h5><TimeHeader timeString={gameData.date} /></h5>
+    <TeamTable teamStats={gameStats.teams[0]} />
+    <TeamTable teamStats={gameStats.teams[1]} />
+  {:else}
+    loading...
+  {/if}
 </div>
 
+<style>
+  div {
+    border: 2px solid #d4d4d4;
+    margin: 16px;
+    background: #202020;
+    border-radius: 10px;
+  }
+</style>

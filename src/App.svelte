@@ -6,6 +6,3 @@
 
 <KeyInput />
 <MatchesList />
-
-<style>
-</style>

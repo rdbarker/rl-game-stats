@@ -1,6 +1,6 @@
 <script>
   import { fetchPing, delay } from "./scripts/apiFetch";
-  import { apiKey, keyVerified } from "./scripts/stores.js";
+  import { apiKey, keyVerified, userId } from "./scripts/stores.js";
 
   let iconStatus = {
     true: { src: "icon-checkmark", color: "#74d978" },
@@ -16,6 +16,7 @@
   $: {
     fetchPing($apiKey).then((json) => {
       $keyVerified = json["chaser"];
+      $userId = json["steam_id"];
       delay(1000);
     });
   }
