@@ -20,7 +20,7 @@
       teamSize: gameData.team_size,
       winningTeam: findWinningTeam(),
       yourTeam: findYourTeam(),
-      teams: buildTeams(gameStats.winningTeam),
+      teams: buildTeams(findWinningTeam()),
     };
   }
   function findWinningTeam() {
