@@ -1,7 +1,8 @@
 <script>
   import TimeHeader from "./match/TimeHeader.svelte";
   import TeamTable from "./match/TeamTable.svelte";
-
+  import GameStats from "./match/GameStats.svelte";
+  import { onMount } from "svelte";
   export let gameData = {};
   let isDataLoaded = false;
   let gameStats = {};
@@ -9,7 +10,6 @@
   $: if (gameData.status === "ok") {
     isDataLoaded = true;
     buildGameStats();
-    console.log(gameStats);
   }
 
   function buildGameStats() {
@@ -68,21 +68,27 @@
   }
 </script>
 
-<div>
+<div class="match">
   {#if isDataLoaded}
-    <h5><TimeHeader timeString={gameData.date} /></h5>
+    <h5><TimeHeader timeString={gameStats.date} /></h5>
     <TeamTable teamStats={gameStats.teams[0]} />
     <TeamTable teamStats={gameStats.teams[1]} />
+    <div class="team-stats">
+      <GameStats {gameStats} />
+    </div>
   {:else}
     loading...
   {/if}
 </div>
 
 <style>
-  div {
+  .match {
     border: 2px solid #d4d4d4;
     margin: 16px;
     background: #202020;
     border-radius: 10px;
+  }
+  .team-stats {
+    max-width: 600px;
   }
 </style>

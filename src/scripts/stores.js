@@ -13,3 +13,5 @@ export const activeTeamStats = writable([
   "shotPercentage",
   "demos",
 ]);
+
+export const activeGameStats = writable(["goals", "shots", "saves"]);

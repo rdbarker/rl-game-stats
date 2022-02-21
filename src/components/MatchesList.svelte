@@ -1,16 +1,17 @@
 <script>
-  import { fetchGame, fetchListOfGames, fetchStats } from "./scripts/apiFetch";
+  import { fetchGame, fetchListOfGames, delay } from "../scripts/apiFetch";
   import Match from "./Match.svelte";
-  import { apiKey, keyVerified } from "./scripts/stores.js";
+  import { apiKey, keyVerified } from "../scripts/stores.js";
   import { onMount } from "svelte";
 
   let time = new Date();
   let secondsBetweenRefresh = 10;
   let games = new Map();
+  let instance;
 
   $: seconds = time.getSeconds();
   $: if (seconds % secondsBetweenRefresh == 0 && $keyVerified) refreshGames();
-
+  $: console.log(instance);
   onMount(() => {
     const interval = setInterval(() => {
       time = new Date();
@@ -51,19 +52,10 @@
       })
     );
   }
-
-  const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 </script>
 
 <div>
   {#each [...games] as [gameId, stats] (gameId)}
-    <Match gameData={stats} />
+    <Match gameData={stats} bind:this={instance} />
   {/each}
 </div>
-
-<style>
-  div {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-</style>

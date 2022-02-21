@@ -1,6 +1,6 @@
 <script>
-  import { fetchPing, delay } from "./scripts/apiFetch";
-  import { apiKey, keyVerified, userId } from "./scripts/stores.js";
+  import { fetchPing, delay } from "../scripts/apiFetch";
+  import { apiKey, keyVerified, userId } from "../scripts/stores.js";
 
   let iconStatus = {
     true: { src: "icon-checkmark", color: "#74d978" },

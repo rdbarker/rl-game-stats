@@ -7,7 +7,7 @@ async function apiFetch(route, key, uris) {
   let ballChasingRoute =
     "https://safe-plateau-49424.herokuapp.com/https://ballchasing.com/api/";
   let statsRoute =
-    "https://api.tracker.gg/api/v2/rocket-league/standard/profile/steam/76561198031153890";
+    "https://api.tracker.gg/api/v2/rocket-league/standard/profile/";
   let fetchRoute = ballChasingRoute;
   //check route and apend
   if (route === "stats") {
@@ -43,8 +43,18 @@ async function fetchListOfGames(key, maxCount = 15, startDate) {
   return apiFetch("bc", key, uris);
 }
 
-async function fetchStats() {
-  return apiFetch("stats");
+async function fetchStats(profileName, profileId, platform) {
+  //bc : rltracker
+  const platforms = {
+    steam: "steam",
+    xbox: "xbl",
+    ps4: "psn",
+    epic: "epic",
+    psynet: "switch",
+  };
+  const profileValue = platform === "steam" ? profileId : profileName;
+  const uris = encodeURIComponent(platforms[platform] + "/" + profileValue);
+  return apiFetch("stats", null, uris);
 }
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
