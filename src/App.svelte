@@ -1,9 +1,6 @@
 <script>
-  import MatchesList from "./components/MatchesList.svelte";
   import KeyInput from "./components/KeyInput.svelte";
-  import StatsBar from "./components/match/StatsBar.svelte";
-  //<KeyInput />
-  //<MatchesList />
+  import MatchesList from "./components/MatchesList.svelte";
 </script>
 
 <div>

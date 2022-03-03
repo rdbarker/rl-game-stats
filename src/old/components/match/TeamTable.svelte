@@ -1,5 +1,4 @@
 <script>
-  //background-color: #515a64;
   import { userId, activeTeamStats } from "../../scripts/stores.js";
   import {
     parseTableHeader,

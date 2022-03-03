@@ -1,94 +1,31 @@
 <script>
+  import { ballchasingApi } from "../scripts/store/stores";
+  import { createMatchStats } from "../scripts/models/match";
   import TimeHeader from "./match/TimeHeader.svelte";
-  import TeamTable from "./match/TeamTable.svelte";
-  import GameStats from "./match/GameStats.svelte";
-  import { onMount } from "svelte";
-  export let gameData = {};
-  let isDataLoaded = false;
-  let gameStats = {};
+  import TeamStatTable from "./match/TeamStatTable.svelte";
+  import { slide } from "svelte/transition";
+  import { quintOut } from "svelte/easing";
 
-  $: if (gameData.status === "ok") {
-    isDataLoaded = true;
-    buildGameStats();
-  }
+  export let matchId;
 
-  function buildGameStats() {
-    gameStats = {
-      date: gameData.date,
-      map: gameData.map_code,
-      matchType: gameData.match_type,
-      teamSize: gameData.team_size,
-      winningTeam: findWinningTeam(),
-      yourTeam: findYourTeam(),
-      teams: buildTeams(findWinningTeam()),
-    };
-  }
-  function findWinningTeam() {
-    return gameData.blue.stats.core.goals > gameData.orange.stats.core.goals
-      ? "blue"
-      : "orange";
-  }
-  function findYourTeam() {
-    let isPlayerOrange = gameData.orange.players
-      .map((player) => player.id.id)
-      .includes(gameData.uploader.steam_id);
-    return isPlayerOrange ? "orange" : "blue";
-  }
-  function buildTeams(winningTeam) {
-    return winningTeam === "blue"
-      ? [buildTeamStats("blue"), buildTeamStats("orange")]
-      : [buildTeamStats("orange"), buildTeamStats("blue")];
-  }
-  function buildTeamStats(teamColor) {
-    return {
-      color: teamColor,
-      goals: gameData[teamColor].stats.core.goals,
-      shots: gameData[teamColor].stats.core.shots,
-      saves: gameData[teamColor].stats.core.saves,
-      players: buildPlayers(teamColor),
-    };
-  }
-  function buildPlayers(teamColor) {
-    return gameData[teamColor].players.map((player) => {
-      return {
-        name: player.name,
-        platform: player.id.platform,
-        id: player.id.id,
-        stats: {
-          score: player.stats.core.score,
-          goals: player.stats.core.goals,
-          shots: player.stats.core.shots,
-          assists: player.stats.core.assists,
-          saves: player.stats.core.saves,
-          shotPercentage: player.stats.core.shooting_percentage,
-          demos: player.stats.demo.inflicted,
-        },
-      };
-    });
-  }
+  let matchStats = null;
+  ballchasingApi.getMatch((value) => {
+    matchStats = createMatchStats(value);
+  }, matchId);
 </script>
 
-<div class="match">
-  {#if isDataLoaded}
-    <h5><TimeHeader timeString={gameStats.date} /></h5>
-    <TeamTable teamStats={gameStats.teams[0]} />
-    <TeamTable teamStats={gameStats.teams[1]} />
-    <div class="team-stats">
-      <GameStats {gameStats} />
-    </div>
-  {:else}
-    loading...
-  {/if}
-</div>
+{#if matchStats}
+  <div transition:slide={{ delay: 250, duration: 400, easing: quintOut }}>
+    <TimeHeader timeString={matchStats.date} />
+
+    <TeamStatTable teamStats={matchStats.teams[0]} />
+  </div>
+{/if}
 
 <style>
-  .match {
-    border: 2px solid #d4d4d4;
-    margin: 16px;
-    background: #202020;
-    border-radius: 10px;
-  }
-  .team-stats {
-    max-width: 600px;
+  div {
+    border-top: 1px solid #5a5a5a;
+    height: 230px;
+    margin-top: 24px;
   }
 </style>

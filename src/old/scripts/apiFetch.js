@@ -1,4 +1,4 @@
-async function apiFetch(route, key, uris) {
+async function apiFetch(route, key, uris = "") {
   let requestOptions = {
     method: "GET",
     headers: { Authorization: key },
